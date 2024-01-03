@@ -23,7 +23,6 @@ export class FindService {
           appKey: apiKey,
         },
       });
-      // console.log(response.config);
       return response.data;
     } catch (error) {
       console.error(error);
