@@ -3,11 +3,11 @@ import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import {User} from "../Entity/auth.entity";
 @Injectable()
-export class AuthService{
+export class UsersService{
     constructor(@InjectRepository(User) private repo:Repository<User> ) {}
 
-    create(username:string, password:string){
-        const user = this.repo.create({username,password})
+    create(email:string, password:string){
+        const user = this.repo.create({email,password})
         return this.repo.save(user)
     }
     findOne(id: number){
@@ -16,8 +16,8 @@ export class AuthService{
         }
         return this.repo.findOneBy({ id })
     }
-    find(username:string){
-        return this.repo.find({where: { username }})
+    find(email:string){
+        return this.repo.find({where: { email }})
     }
 
     async update(id: number,attrs: Partial<User>){
