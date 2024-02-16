@@ -10,9 +10,13 @@ export class UsersService{
     constructor(@InjectRepository(User) private repo:Repository<User>) {}
 
     async signup(userid:string, username: string,email:string, password:string){
-        const isUser = this.repo.find({where:{email}})
-        if (!isUser) {
+        const isEmail:User[] = await this.repo.find({where:{email}})
+        const isUser:User[] = await this.repo.find({where:{userid}})
+        if (isEmail.length) {
             throw new BadRequestException('email in use')
+        }
+        if(isUser.length){
+            throw new BadRequestException('userid in use')
         }
 
         const salt = randomBytes(8).toString('hex')
