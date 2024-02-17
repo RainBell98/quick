@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Param, Patch, Post} from '@nestjs/common';
+import {Body,Headers, Controller, Delete, Param, Patch, Post} from '@nestjs/common';
 import {CreateUserDto} from "../dto/create-user.dto";
 import {UsersService} from "./users.service";
 import {AuthSigninDto} from "../dto/auth.signin.dto";
@@ -14,8 +14,11 @@ export class UsersController {
     }
 
     @Post('/signin')
-    signin(@Body() body:AuthSigninDto){
-        return this.authService.signin(body.userid,body.password)
+    signin(@Headers('authorization') rawToken: string){
+        const token = this.authService.extractTokenFromHeader(rawToken,false)
+        console.log(token)
+        const credentials = this.authService.decodeBasicToken(token)
+        return this.authService.signin(credentials)
     }
 
     @Patch('/:id')
