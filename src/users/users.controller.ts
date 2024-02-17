@@ -3,19 +3,19 @@ import {CreateUserDto} from "../dto/create-user.dto";
 import {UsersService} from "./users.service";
 import {AuthSigninDto} from "../dto/auth.signin.dto";
 import {UpdateUserDto} from "../dto/update-user.dto";
+import {AuthService} from "./auth.service";
 
 @Controller('users')
 export class UsersController {
-    constructor(private usersService:UsersService) {
-    }
+    constructor(private usersService:UsersService, private authService:AuthService) {}
     @Post('/signup')
     signup(@Body() body: CreateUserDto){
-        return this.usersService.signup(body.userid,body.username,body.email,body.password)
+        return this.authService.signup(body.userid,body.username,body.email,body.password)
     }
 
     @Post('/signin')
     signin(@Body() body:AuthSigninDto){
-        return this.usersService.signin(body.userid,body.password)
+        return this.authService.signin(body.userid,body.password)
     }
 
     @Patch('/:id')
