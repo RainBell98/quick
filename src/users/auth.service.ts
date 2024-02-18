@@ -46,22 +46,39 @@ export class AuthService{
         }
 
         const token = splitToken[1]
-
         return token
     }
     decodeBasicToken(base64String: string){
         const decoded = Buffer.from(base64String,'base64').toString('utf8')
-        console.log('asdf',decoded)
         const split = decoded.split(':')
-        console.log('sdfd',split.length)
 
-        if(split.length !== 8){
+        if(split.length !== 2){
             throw new UnauthorizedException('잘못된 유형의 토큰')
         }
 
         const userid = split[0];
         const password = split[1];
         return {userid, password}
+    }
+
+    verifyToken(token:string){
+        return this.jwtService.verify(token,{
+            secret:process.env.JWT_SECRET_KEY,
+        })
+    }
+
+    rotateToken(token:string, isRefreshToken:boolean){
+        const decoded = this.jwtService.verify(token,{
+            secret:process.env.JWT_SECRET_KEY,
+        })
+
+        if(decoded.type !== 'refresh'){
+            throw new UnauthorizedException('토큰 재발급은 Refresh 토큰으로만 가능합니다')
+        }
+
+        return this.signToken({
+            ...decoded,
+        }, isRefreshToken)
     }
 
     async signup(userid:string, username: string,email:string, password:string){
@@ -85,7 +102,6 @@ export class AuthService{
 
     async signin(user: Pick<User,'userid'|'password'>){
         const searchUser = await this.repo.findOne({where:{userid: user.userid}})
-        console.log("user",user)
         if(!searchUser){
             throw new NotFoundException('user not found')
         }

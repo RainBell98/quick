@@ -8,6 +8,25 @@ import {AuthService} from "./auth.service";
 @Controller('users')
 export class UsersController {
     constructor(private usersService:UsersService, private authService:AuthService) {}
+
+    @Post('/token/access')
+    createTokenAccess(@Headers('authorization') rawToken:string){
+        const token = this.authService.extractTokenFromHeader(rawToken,true)
+
+        const newToken = this.authService.rotateToken(token,false)
+
+        return {accessToken: newToken}
+    }
+
+    @Post('/token/refresh')
+    createTokenRefresh(@Headers('authorization') rawToken:string){
+        const token = this.authService.extractTokenFromHeader(rawToken,true)
+
+        const newToken = this.authService.rotateToken(token,true)
+
+        return {refreshToken: newToken}
+    }
+
     @Post('/signup')
     signup(@Body() body: CreateUserDto){
         return this.authService.signup(body.userid,body.username,body.email,body.password)
