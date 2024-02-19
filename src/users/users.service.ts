@@ -6,6 +6,13 @@ import {User} from "../Entity/auth.entity";
 export class UsersService{
     constructor(@InjectRepository(User) private repo:Repository<User>) {}
 
+    async findUser(userid:string){
+        const user = await this.repo.findOne({where: {userid}})
+        if(!user){
+            throw new Error('user not found')
+        }
+        return user
+    }
     async update(id: number,attrs: Partial<User>){
         const user = await this.repo.findOne({where:{id}})
         if(!user){
@@ -22,4 +29,6 @@ export class UsersService{
         }
         return this.repo.remove(user)
     }
+
+
 }

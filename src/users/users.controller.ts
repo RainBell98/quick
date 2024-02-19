@@ -1,15 +1,18 @@
-import {Body,Headers, Controller, Delete, Param, Patch, Post} from '@nestjs/common';
+import {Body, Headers, Controller, Delete, Param, Patch, Post, UseGuards} from '@nestjs/common';
 import {CreateUserDto} from "../dto/create-user.dto";
 import {UsersService} from "./users.service";
 import {AuthSigninDto} from "../dto/auth.signin.dto";
 import {UpdateUserDto} from "../dto/update-user.dto";
 import {AuthService} from "./auth.service";
+import {BasicTokenGuard} from "../guard/basic-token.guard";
+import {AccessTokenGuard, RefreshTokenGuard} from "../guard/bearer-token.guard";
 
 @Controller('users')
 export class UsersController {
     constructor(private usersService:UsersService, private authService:AuthService) {}
 
     @Post('/token/access')
+    @UseGuards(AccessTokenGuard)
     createTokenAccess(@Headers('authorization') rawToken:string){
         const token = this.authService.extractTokenFromHeader(rawToken,true)
 
@@ -19,6 +22,7 @@ export class UsersController {
     }
 
     @Post('/token/refresh')
+    @UseGuards(RefreshTokenGuard)
     createTokenRefresh(@Headers('authorization') rawToken:string){
         const token = this.authService.extractTokenFromHeader(rawToken,true)
 
@@ -33,6 +37,7 @@ export class UsersController {
     }
 
     @Post('/signin')
+    @UseGuards(BasicTokenGuard)
     signin(@Headers('authorization') rawToken: string){
         const token = this.authService.extractTokenFromHeader(rawToken,false)
         console.log(token)
