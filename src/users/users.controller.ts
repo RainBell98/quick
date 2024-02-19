@@ -1,4 +1,4 @@
-import {Body, Headers, Controller, Delete, Param, Patch, Post, UseGuards} from '@nestjs/common';
+import {Body, Headers, Controller, Delete, Param, Patch, Post, UseGuards, ParseIntPipe} from '@nestjs/common';
 import {CreateUserDto} from "../dto/create-user.dto";
 import {UsersService} from "./users.service";
 import {AuthSigninDto} from "../dto/auth.signin.dto";
@@ -40,18 +40,17 @@ export class UsersController {
     @UseGuards(BasicTokenGuard)
     signin(@Headers('authorization') rawToken: string){
         const token = this.authService.extractTokenFromHeader(rawToken,false)
-        console.log(token)
         const credentials = this.authService.decodeBasicToken(token)
         return this.authService.signin(credentials)
     }
 
     @Patch('/:id')
-    updateUser(@Param('id') id:string, @Body() body:UpdateUserDto){
-        return this.usersService.update(parseInt(id),body)
+    updateUser(@Param('id',ParseIntPipe) id:number, @Body() body:UpdateUserDto){
+        return this.usersService.update(id,body)
     }
 
     @Delete('/:id')
-    deleteUser(@Param('id') id:string){
-        return this.usersService.remove(parseInt(id))
+    deleteUser(@Param('id',ParseIntPipe) id:number){
+        return this.usersService.remove(id)
     }
 }
