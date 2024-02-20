@@ -6,6 +6,16 @@ import {User} from "../Entity/auth.entity";
 export class UsersService{
     constructor(@InjectRepository(User) private repo:Repository<User>) {}
 
+    async isEmail(email:string):Promise<User[]>{
+        const isEmail = await this.repo.find({where:{email}})
+        return isEmail
+    }
+
+    async isUserId(userid:string):Promise<User[]>{
+        const isUserId = await this.repo.find({where:{userid}})
+        return isUserId
+    }
+
     async findUser(userid:string){
         const user = await this.repo.findOne({where: {userid}})
         if(!user){

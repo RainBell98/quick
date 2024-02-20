@@ -7,6 +7,8 @@ import {promisify} from "util";
 import {JwtService} from "@nestjs/jwt";
 import * as dotenv from 'dotenv';
 import * as process from "process";
+import {UsersService} from "./users.service";
+import {CreateUserDto} from "../dto/create-user.dto";
 
 dotenv.config();
 const scrypt = promisify(_scrypt)
@@ -15,7 +17,8 @@ const scrypt = promisify(_scrypt)
 export class AuthService{
     constructor(
         @InjectRepository(User) private repo:Repository<User>,
-        private readonly jwtService: JwtService
+        private readonly jwtService: JwtService,
+        private readonly usersService:UsersService
     ) {}
     signToken(user: Pick<User,'userid'|'id'>, isRefreshToken: boolean){
         const payload = {
@@ -81,9 +84,9 @@ export class AuthService{
         }, isRefreshToken)
     }
 
-    async signup(userid:string, username: string,email:string, password:string){
-        const isEmail:User[] = await this.repo.find({where:{email}})
-        const isUser:User[] = await this.repo.find({where:{userid}})
+    async signup(userInfo:CreateUserDto){
+        const isEmail = await this.usersService.isEmail(userInfo.email)
+        const isUser = await this.usersService.isUserId(userInfo.userid)
         if (isEmail.length) {
             throw new BadRequestException('email in use')
         }
@@ -92,10 +95,16 @@ export class AuthService{
         }
 
         const salt = randomBytes(8).toString('hex')
-        const hash = (await scrypt(password,salt,32)) as Buffer;
+        const hash = (await scrypt(userInfo.password,salt,32)) as Buffer;
         const result = salt + '.' + hash.toString('hex')
 
-        const user = this.repo.create({userid,username,email,password:result})
+        const user = this.repo.create(
+            {
+                userid: userInfo.userid,
+                username: userInfo.username,
+                email: userInfo.email,
+                password:result
+            })
         await this.repo.save(user)
         return this.loginUser(user)
     }
