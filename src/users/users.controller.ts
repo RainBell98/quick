@@ -1,11 +1,13 @@
-import {Body, Headers, Controller, Delete, Param, Patch, Post, UseGuards, ParseIntPipe} from '@nestjs/common';
+import {Body, Headers, Controller, Delete, Param, Patch, Post, UseGuards, ParseIntPipe, Request} from '@nestjs/common';
 import {CreateUserDto} from "../dto/create-user.dto";
 import {UsersService} from "./users.service";
-import {AuthSigninDto} from "../dto/auth.signin.dto";
 import {UpdateUserDto} from "../dto/update-user.dto";
 import {AuthService} from "./auth.service";
 import {BasicTokenGuard} from "../guard/basic-token.guard";
 import {AccessTokenGuard, RefreshTokenGuard} from "../guard/bearer-token.guard";
+import { UserDecorator} from "./decorator/user.decorator";
+import { User} from "../Entity/auth.entity"
+
 
 @Controller('users')
 export class UsersController {
@@ -46,12 +48,13 @@ export class UsersController {
 
     @Patch('/update')
     @UseGuards(AccessTokenGuard)
-    updateUser(@Body() body:UpdateUserDto){
-        return this.usersService.update(body.userid,body)
+    updateUser(@UserDecorator() user: User , @Body() body:UpdateUserDto){
+        const userid = user.userid
+        return this.usersService.update(userid,body)
     }
 
     @Delete('/delete/:id')
-    deleteUser(@Param('id',ParseIntPipe) id:number){
-        return this.usersService.remove(id)
+    deleteUser(@Param('userid') userid:string){
+        return this.usersService.remove(userid)
     }
 }

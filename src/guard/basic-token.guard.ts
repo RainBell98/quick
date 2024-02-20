@@ -18,7 +18,7 @@ export class BasicTokenGuard implements CanActivate{
 
         const {userid, password} = this.authService.decodeBasicToken(token)
 
-        const user = this.authService.signin({userid, password})
+        const user = await this.authService.signin({userid, password})
         return true
     }
 }

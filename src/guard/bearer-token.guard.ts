@@ -14,14 +14,14 @@ export class BearerTokenGuard implements CanActivate{
         if(!rawToken){
             throw new UnauthorizedException('토큰이 없습니다')
         }
-
         const token = this.authService.extractTokenFromHeader(rawToken, true)
 
         const result = await this.authService.verifyToken(token)
 
-        const user = await this.usersService.findUser(req.userid)
+        const user = await this.usersService.findUser(result.userid)
 
         req.user = user;
+
         req.token = token;
         req.tokenType = result.type;
 
@@ -39,7 +39,6 @@ export class AccessTokenGuard extends BearerTokenGuard{
         if(req.tokenType !== 'access'){
             throw new UnauthorizedException('Acccess Token이 아닙니다.')
         }
-
         return true
     }
 }
