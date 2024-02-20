@@ -98,14 +98,12 @@ export class AuthService{
         const hash = (await scrypt(userInfo.password,salt,32)) as Buffer;
         const result = salt + '.' + hash.toString('hex')
 
-        const user = this.repo.create(
-            {
-                userid: userInfo.userid,
-                username: userInfo.username,
-                email: userInfo.email,
-                password:result
-            })
-        await this.repo.save(user)
+        const user = await this.usersService.create(
+            userInfo.userid,
+            userInfo.username,
+            userInfo.email,
+            result
+        )
         return this.loginUser(user)
     }
 
