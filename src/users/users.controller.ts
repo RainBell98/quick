@@ -44,12 +44,13 @@ export class UsersController {
         return this.authService.signin(credentials)
     }
 
-    @Patch('/:id')
-    updateUser(@Param('id',ParseIntPipe) id:number, @Body() body:UpdateUserDto){
-        return this.usersService.update(id,body)
+    @Patch('/update')
+    @UseGuards(AccessTokenGuard)
+    updateUser(@Body() body:UpdateUserDto){
+        return this.usersService.update(body.userid,body)
     }
 
-    @Delete('/:id')
+    @Delete('/delete/:id')
     deleteUser(@Param('id',ParseIntPipe) id:number){
         return this.usersService.remove(id)
     }

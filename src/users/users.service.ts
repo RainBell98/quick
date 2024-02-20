@@ -13,8 +13,8 @@ export class UsersService{
         }
         return user
     }
-    async update(id: number,attrs: Partial<User>){
-        const user = await this.repo.findOne({where:{id}})
+    async update(userid: string,attrs: Partial<User>){
+        const user = await this.findUser(userid)
         if(!user){
             throw new Error('user not found')
         }

@@ -21,7 +21,7 @@ export class AuthService{
         const payload = {
             userid: user.userid,
             sub: user.id,
-            type: isRefreshToken ? 'refresh': 'accesss',
+            type: isRefreshToken ? 'refresh': 'access',
         }
         return this.jwtService.sign(payload,{
             secret: process.env.JWT_SECRET_KEY,
