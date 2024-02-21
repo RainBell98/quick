@@ -54,8 +54,10 @@ export class UsersController {
         return this.usersService.update(userid,body)
     }
 
-    @Delete('/delete/:id')
-    deleteUser(@Param('userid') userid:string){
+    @Delete('/delete')
+    @UseGuards(AccessTokenGuard)
+    deleteUser(@UserDecorator() user:User){
+        const userid = user.userid
         return this.usersService.remove(userid)
     }
 }

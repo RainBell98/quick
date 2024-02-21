@@ -45,7 +45,7 @@ export class UsersService{
     }
 
     async remove(userid: string){
-        const user = await this.repo.findOne({where:{userid}})
+        const user = await this.findUser(userid)
         if(!user){
             throw new Error('user not found')
         }
