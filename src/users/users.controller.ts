@@ -7,6 +7,7 @@ import {BasicTokenGuard} from "../guard/basic-token.guard";
 import {AccessTokenGuard, RefreshTokenGuard} from "../guard/bearer-token.guard";
 import { UserDecorator} from "./decorator/user.decorator";
 import { User} from "../Entity/auth.entity"
+import {PasswordPipe} from "./pipe/password.pipe";
 
 
 @Controller('users')
