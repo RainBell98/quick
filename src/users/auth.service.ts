@@ -120,4 +120,11 @@ export class AuthService{
         }
         return this.loginUser(searchUser);
     }
+
+    async logout(){
+        return{
+            accessToken: null,
+            refreshToken: null
+        }
+    }
 }
