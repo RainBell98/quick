@@ -1,5 +1,6 @@
 import {Column, Entity, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
 import {IsEmail, IsString, Length} from "class-validator";
+import {lengthValidationMessage} from "../validation-message/length-validation.message";
 
 @Entity()
 export class User{
@@ -20,6 +21,6 @@ export class User{
 
     @Column()
     @IsString()
-    @Length(3,8, {message:"password는 3자리 이상 8자리 이하입니다."})
+    @Length(3,8, {message: lengthValidationMessage})
     password:string
 }
