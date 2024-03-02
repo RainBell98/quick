@@ -1,4 +1,16 @@
-import {Body, Headers, Controller, Delete, Param, Patch, Post, UseGuards, ParseIntPipe, Request} from '@nestjs/common';
+import {
+    Body,
+    Headers,
+    Controller,
+    Delete,
+    Param,
+    Patch,
+    Post,
+    UseGuards,
+    ParseIntPipe,
+    Request,
+    ClassSerializerInterceptor, UseInterceptors
+} from '@nestjs/common';
 import {CreateUserDto} from "../dto/create-user.dto";
 import {UsersService} from "./users.service";
 import {UpdateUserDto} from "../dto/update-user.dto";
@@ -35,6 +47,7 @@ export class UsersController {
     }
 
     @Post('/signup')
+    @UseInterceptors(ClassSerializerInterceptor)
     signup(@Body() userInfo: CreateUserDto){
         return this.authService.signup(userInfo)
     }
