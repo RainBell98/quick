@@ -5,7 +5,7 @@ import {TypeOrmModule} from "@nestjs/typeorm";
 import {typeOrmConfig} from "../configs/typeorm.config";
 
 @Module({
-  imports: [UsersModule,TypeOrmModule.forRoot(typeOrmConfig)],
+  imports: [UsersModule,TypeOrmModule.forRoot(typeOrmConfig),FindModule],
   controllers: [],
   providers: [],
 })

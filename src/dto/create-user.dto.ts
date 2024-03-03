@@ -1,4 +1,3 @@
-import {IsEmail, IsString} from "class-validator";
 import {User} from "../Entity/auth.entity";
 import {PickType} from "@nestjs/mapped-types"
 
