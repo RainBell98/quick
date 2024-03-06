@@ -9,6 +9,6 @@ export class FindController {
   @Post('/plan')
   // @UseGuards(BasicTokenGuard)
   getPlan(@Body() body: PlanDto) {
-    return this.findService.getPlan();
+    return this.findService.getPlan(body);
   }
 }
