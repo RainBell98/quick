@@ -60,10 +60,6 @@ export class UsersController {
         return this.authService.signin(credentials)
     }
 
-    // @Post('/logout')
-    // logout(){
-    //     return this.authService.logout()
-    // }
 
     @Patch('/update')
     @UseGuards(AccessTokenGuard)
