@@ -20,6 +20,11 @@ export class User{
     @IsEmail()
     email: string
 
+    @Column({
+        nullable: true
+    })
+    profile?: string
+
     @Column()
     @IsString()
     @Expose()
