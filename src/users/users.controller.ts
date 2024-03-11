@@ -9,7 +9,7 @@ import {
     UseGuards,
     ParseIntPipe,
     Request,
-    ClassSerializerInterceptor, UseInterceptors
+    ClassSerializerInterceptor, UseInterceptors, UploadedFile
 } from '@nestjs/common';
 import {CreateUserDto} from "../dto/create-user.dto";
 import {UsersService} from "./users.service";
@@ -20,6 +20,7 @@ import {AccessTokenGuard, RefreshTokenGuard} from "../guard/bearer-token.guard";
 import { UserDecorator} from "./decorator/user.decorator";
 import { User} from "../Entity/auth.entity"
 import {PasswordPipe} from "./pipe/password.pipe";
+import {FileInterceptor} from "@nestjs/platform-express";
 
 
 @Controller('users')
@@ -51,6 +52,13 @@ export class UsersController {
     signup(@Body() userInfo: CreateUserDto){
         return this.authService.signup(userInfo)
     }
+
+    @Post('profile')
+    @UseInterceptors(FileInterceptor('image'))
+    profile(@UploadedFile() file?:Express.Multer.File){
+
+    }
+
 
     @Post('/signin')
     @UseGuards(BasicTokenGuard)
