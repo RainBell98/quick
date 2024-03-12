@@ -54,9 +54,12 @@ export class UsersController {
     }
 
     @Post('profile')
+    @UseGuards(AccessTokenGuard)
     @UseInterceptors(FileInterceptor('image'))
     profile(@UploadedFile() file?:Express.Multer.File){
-
+        return{
+            filename:file.filename
+        }
     }
 
 

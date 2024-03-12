@@ -8,7 +8,7 @@ import { JwtModule } from '@nestjs/jwt'
 import {MulterModule} from "@nestjs/platform-express";
 import {extname} from 'path';
 import * as multer from 'multer'
-import {POST_IMAGE_PATH} from "../common/const/path.const";
+import {POST_IMAGE_PATH, TEMP_FOLDER_PATH} from "../common/const/path.const";
 import {v4 as uuid} from 'uuid'
 
 @Module({
@@ -29,7 +29,7 @@ import {v4 as uuid} from 'uuid'
     },
       storage: multer.diskStorage({
         destination: function (req, res, callback) {
-          callback(null, POST_IMAGE_PATH)
+          callback(null, TEMP_FOLDER_PATH)
         },
         filename: function (req,file,callback){
           callback(null,`${uuid()}${extname(file.originalname)}` )

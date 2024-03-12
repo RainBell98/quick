@@ -1,7 +1,9 @@
 import {Column, Entity, PrimaryColumn, PrimaryGeneratedColumn} from "typeorm";
 import {IsEmail, IsString, Length} from "class-validator";
 import {lengthValidationMessage} from "../validation-message/length-validation.message";
-import {Exclude, Expose} from "class-transformer";
+import {Exclude, Expose, Transform} from "class-transformer";
+import {POST_PUBLIC_IMAGE_PATH} from "../common/const/path.const";
+import {join} from "path";
 
 @Entity()
 export class User{
@@ -23,6 +25,7 @@ export class User{
     @Column({
         nullable: true
     })
+    @Transform(({value})=> value && `/${join(POST_PUBLIC_IMAGE_PATH,value)}`)
     profile?: string
 
     @Column()

@@ -25,12 +25,13 @@ export class UsersService{
         return user
     }
 
-    async create(userid: string, username: string, email: string, password: string){
+    async create(userid: string, username: string, email: string, password: string,profile:string){
         const user = this.repo.create({
             userid,
             username,
             email,
-            password
+            password,
+            profile
         })
         return this.repo.save(user)
     }

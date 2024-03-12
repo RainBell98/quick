@@ -102,7 +102,8 @@ export class AuthService{
             userInfo.userid,
             userInfo.username,
             userInfo.email,
-            result
+            result,
+            userInfo.image
         )
         return this.loginUser(user)
     }
