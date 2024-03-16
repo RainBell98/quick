@@ -4,7 +4,9 @@ import {IsOptional, IsString} from "class-validator";
 
 export class CreateUserDto extends PickType(User,['userid','email','password','email','username']){
 
-    @IsString()
+    @IsString({
+        each: true
+    })
     @IsOptional()
-    image?: string
+    image?: string[]
 }
