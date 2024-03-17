@@ -39,5 +39,5 @@ export class User{
     password:string
 
     @OneToMany((type)=> Profile, (profile)=> profile.post)
-    profiles: Profile[]
+    profiles: Profile
 }

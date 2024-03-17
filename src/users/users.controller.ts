@@ -21,6 +21,7 @@ import { UserDecorator} from "./decorator/user.decorator";
 import { User} from "../Entity/auth.entity"
 import {PasswordPipe} from "./pipe/password.pipe";
 import {FileInterceptor} from "@nestjs/platform-express";
+import { LogInterceptor } from "../interceptor/log.interceptor";
 
 
 @Controller('users')
@@ -65,6 +66,7 @@ export class UsersController {
 
     @Post('/signin')
     @UseGuards(BasicTokenGuard)
+    @UseInterceptors(LogInterceptor)
     signin(@Headers('authorization') rawToken: string){
         const token = this.authService.extractTokenFromHeader(rawToken,false)
         const credentials = this.authService.decodeBasicToken(token)
